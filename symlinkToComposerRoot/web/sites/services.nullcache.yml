@@ -1,0 +1,5 @@
+# Local development services.
+# => localsettings/settings.custom.environment.dev.php
+services:
+  cache.backend.null:
+    class: Drupal\Core\Cache\NullBackendFactory

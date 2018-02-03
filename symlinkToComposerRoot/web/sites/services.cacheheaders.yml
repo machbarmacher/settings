@@ -1,0 +1,5 @@
+# Local development services.
+# => localsettings/settings.custom.environment.dev.php
+parameters:
+  http.response.debug_cacheability_headers: true
+

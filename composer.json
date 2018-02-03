@@ -1,0 +1,13 @@
+{
+    "name": "machbarmacher/settings",
+    "description": "Drupal settings components.",
+    "type": "drupal-drush",
+    "authors": [
+        {
+            "name": "Axel Rutz",
+            "email": "axel.rutz@machbarmecher.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

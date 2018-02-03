@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+set +v
+
+echo "This will install settings. Are you in composer root?"
+select yn in "Yes" "No"
+case $yn in
+    Yes ) echo "OK...";;
+    No ) exit;;
+esac
+
+# Dirs.
+targetDir=.
+binDir=$(dirname $0)
+relOurDir=$(dirname $binDir)
+
+# Copy our stuff.
+rsync $targetDir/$resOurDir/copyToComposerRoot $targetDir/
+
+# Symlink our stuff.
+relSymlinkDir=symlinkToComposerRoot
+for file in $(cd $relOurDir/$relSymlinkDir; find . -type f); do
+  relFileDir=$(dirname $file)
+  mkdir -p $targetDir/$relFileDir;
+  $relUpDir=$(echo "$relFileDir"|sed 's/[^/]*/../g')
+  ln -s $relUpDir/$relOurDir/$relSymlinkDir/$file $targetDir/$file
+done
+
+# Copy container yamls.
+[ -f sites/default/]
+
+# Create Hash salt.
+$binDir/settings-hashsalt $targetDir/settings-project/hash_salt.php
+

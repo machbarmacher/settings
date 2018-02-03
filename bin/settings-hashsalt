@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+if (
+  !isset($argv[2])
+  && isset($argv[1])
+  && ($file = $argv[1])
+  && is_file($file)
+  && is_writable($file)
+) {
+  // Good!
+}
+else {
+  exit("Usage: $argv[0] path/to/custom/settings.php" . "\n");
+}
+if (!function_exists('random_bytes')) {
+  exit('This needs PHP7.' . "\n");
+}
+// Needs PHP7. See \Drupal\Component\Utility\Crypt::randomBytesBase64
+$hash = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(random_bytes(55)));
+$content = "<?php\nreturn '$hash';\n\n";
+$result = file_put_contents($file, $content, LOCK_EX);
+if (!$result) {
+  exit('Error writing file.' . "\n");
+}
+
