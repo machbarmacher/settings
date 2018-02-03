@@ -36,7 +36,7 @@ stages:
     # Build
     - apt-get update -y && apt-get install --yes unzip
     - COMPOSER_ALLOW_SUPERUSER=1
-    - composer global require hirak/prestissimo bamarni/composer-bin-plugin --no-progress --optimize-autoloader
+    - composer global require hirak/prestissimo bamarni/composer-bin-plugin --no-progress --optimize-autoloader --prefer-dist
     - composer bin all install --no-progress --optimize-autoloader --prefer-dist
     - composer install --no-progress --optimize-autoloader --prefer-dist
     - '[ -f docroot ] || ln -s web docroot'
