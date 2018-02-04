@@ -1,37 +1,37 @@
 #!/bin/bash
 set -e
-set +v
 
 echo "This will install settings. Are you in composer root?"
-select yn in "Yes" "No"
-case $yn in
-    Yes ) echo "OK...";;
-    No ) exit;;
-esac
+select yn in "Yes" "No"; do
+  case $yn in
+      Yes ) echo "OK..."; break;;
+      No ) exit;;
+  esac
+done
 
 # Dirs.
 targetDir=.
-binDir=$(dirname $0)
-relOurDir=$(dirname $binDir)
+binDir=$(dirname $(realpath "$0"))
+ourDir=$(dirname "$binDir")
+
+set -v
 
 # Copy our stuff.
-rsync $targetDir/$resOurDir/copyToComposerRoot $targetDir/
+rsync -rv "$ourDir/copyToComposerRoot/" "$targetDir/"
 
 # Symlink our stuff.
-relSymlinkDir=symlinkToComposerRoot
-for file in $(cd $relOurDir/$relSymlinkDir; find . -type f); do
-  relFileDir=$(dirname $file)
-  mkdir -p $targetDir/$relFileDir;
-  $relUpDir=$(echo "$relFileDir"|sed 's/[^/]*/../g')
-  ln -s $relUpDir/$relOurDir/$relSymlinkDir/$file $targetDir/$file
+symlinkDir=$ourDir/symlinkToComposerRoot
+for relFile in $(cd $symlinkDir; find . -type f); do
+  mkdir -p $(dirname $targetDir/$relFile)
+  ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
 done
-
-# Copy container yamls.
-[ -f sites/default/services.yml ] || cp sites/default/default.services.yml sites/default/services.yml
 
 # Create Hash salt.
 $binDir/settings-hashsalt $targetDir/settings-project/hash_salt.php
 
 # Pin php version to 7.0 (FSB) to prevent 7.1 packages in composer.lock.
 composer config platform.php 7.0
+
+# Copy container yamls.
+cp web/sites/default/default.services.yml web/sites/default/services.yml
 
