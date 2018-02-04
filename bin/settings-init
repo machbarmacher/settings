@@ -30,7 +30,7 @@ done
 $binDir/settings-hashsalt $targetDir/settings-project/hash_salt.php
 
 # Pin php version to 7.0 (FSB) to prevent 7.1 packages in composer.lock.
-composer config platform.php 7.0
+composer config platform.php 7.0.17
 
 # Copy container yamls.
 cp web/sites/default/default.services.yml web/sites/default/services.yml
