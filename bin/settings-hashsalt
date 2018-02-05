@@ -20,7 +20,7 @@ if (!function_exists('random_bytes')) {
 // Needs PHP7. See \Drupal\Component\Utility\Crypt::randomBytesBase64
 $hash = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(random_bytes(55)));
 $content = "<?php\nreturn '$hash';\n\n";
-$result = file_put_contents($file, $content, LOCK_EX);
+$result = file_put_contents($file, $content);
 if (!$result) {
   exit('Error writing file.' . "\n");
 }
