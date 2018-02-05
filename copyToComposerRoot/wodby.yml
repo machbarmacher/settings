@@ -14,5 +14,5 @@ pipeline:
   - name: Import config
     command: drush -y cim
     directory: web
-    only_if: test "$(drush status --fields=bootstrap)"
+    only_if: test "$(drush status --fields=bootstrap)" && test -f ../config-sync/core.extension.yml
 
