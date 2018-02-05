@@ -27,7 +27,7 @@ for relFile in $(cd $symlinkDir; find . -type f); do
 done
 
 # Create Hash salt.
-$binDir/settings-hashsalt $targetDir/settings-project/hash_salt.php
+$binDir/settings-hashsalt $targetDir/custom/hash_salt.php
 
 # Copy container yamls.
 [-f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml
