@@ -59,8 +59,8 @@ stages:
     # Wait
     - (for i in {1..10}; do [ "$COMMIT" = "$(ssh $SSH_URL 'basename $(readlink .deploy/current)')" ] && exit; echo "Retry $i"; sleep 2; done; exit 1)
     # Revert
-    - ssh $SSH_URL 'cd current/docroot; [ ! "$(../vendor/bin/drush status --fields=bootstrap)" ] || ../vendor/bin/drush -y updb'
-    - ssh $SSH_URL 'cd current/docroot; [ ! "$(../vendor/bin/drush status --fields=bootstrap)" ] || [ ! -f ../config-sync/core.extension.yml ] || ../vendor/bin/drush -y cim'
+    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && $? && [ ! BOOT ] || ../vendor/bin/drush -y updb'
+    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && $? && [ ! BOOT ] || [ ! -f ../config-sync/core.extension.yml ] || ../vendor/bin/drush -y cim'
     # Set crontab
     - ssh $SSH_URL "echo '$CRONTAB' |{ crontab -; } "
 deploy-live:
