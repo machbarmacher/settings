@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+echo "This will install settings. Are you in composer root?"
+select yn in "Yes" "No"; do
+  case $yn in
+      Yes ) echo "OK..."; break;;
+      No ) exit;;
+  esac
+done
+
+# Dirs.
+targetDir=.
+binDir=$(dirname $(realpath "$0"))
+ourDir=$(dirname "$binDir")
+
+set -v
+
+# Copy our stuff.
+# We can't symlink this as it is needed before it's target is there.
+cp -f "$ourDir/copyToComposerRoot/.gitlab-ci.yml" "$targetDir/"
+
