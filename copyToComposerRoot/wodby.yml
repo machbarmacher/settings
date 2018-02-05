@@ -4,9 +4,9 @@ pipeline:
   - name: Composer install.
     command: composer install --no-progress --optimize-autoloader --prefer-dist
   - name: Symlink our settings.
-    command: ln -s server-wodby.php settings/server.php
+    command: ln -sf server-wodby.php settings/server.php
   - name: Symlink our solr.
-    command: ln -s server-wodby.php settings/server.php
+    command: ln -sf solr-wodby.php settings/solr.php
   - name: Update database
     command: drush -y updb
     directory: web
