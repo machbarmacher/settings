@@ -3,15 +3,17 @@
 if (
   !isset($argv[2])
   && isset($argv[1])
-  && ($file = $argv[1])
-  && is_file($file)
-  && is_writable($file)
 ) {
   // Good!
 }
 else {
   exit("Usage: $argv[0] path/to/custom/settings.php" . "\n");
 }
+$file = $argv[1];
+if(file_exists($file)) {
+  exit("Target file exists.");
+}
+
 if (!function_exists('random_bytes')) {
   exit('This needs PHP7.' . "\n");
 }
