@@ -4,9 +4,9 @@ shared_folders:
   - logs
 env_specific_files:
   settings/server.php:
-    live: settings/server-freistilbox.php
-    test: settings/server-freistilbox.php
+    live: server-freistilbox.php
+    test: server-freistilbox.php
   settings/solr.php:
-    live: settings/solr-freistilbox.php
-    test: settings/solr-freistilbox.php
+    live: solr-freistilbox.php
+    test: solr-freistilbox.php
 
