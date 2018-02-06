@@ -22,5 +22,3 @@ if (PHP_SAPI !== 'cli') {
   }
 }
 
-include '../settings.common.php';
-
