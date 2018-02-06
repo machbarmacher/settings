@@ -41,8 +41,9 @@ stages:
     - composer install --no-progress --optimize-autoloader --prefer-dist
     - composer bin all install --no-progress --optimize-autoloader --prefer-dist
     - '[ -f docroot ] || ln -s web docroot'
+    # Set siteurl.php as freistilbox does not know its URL :-(.
     - >-
-     { echo "<?php"; echo "return '$SITE_URL';"; } >siteurl.php
+     { echo "<?php"; echo "return '$SITE_URL';"; } >settings/siteurl.php
     # Deploy
     - git config --global user.email "$GITLAB_USER_EMAIL"
     - git config --global user.name "$GITLAB_USER_NAME"
