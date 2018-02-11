@@ -11,11 +11,14 @@ ourDir=$(dirname "$binDir")
 
 set -v
 
-# Copy our stuff.
+# Copy stuff that is trivial or needed before the build.
 rsync -rv "$ourDir/copy/" "$targetDir/"
 
-# Symlink our stuff.
-symlinkDir=$ourDir/symlink
+# Scaffold (copy if not exists).
+rsync -rv --ignore-existing "$ourDir/scaffold/" "$targetDir/"
+
+# Symlink.
+symlinkDir="$ourDir/symlink"
 for relFile in $(cd $symlinkDir; find . -type f); do
   mkdir -p $(dirname $targetDir/$relFile)
   ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
