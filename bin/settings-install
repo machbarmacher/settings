@@ -16,8 +16,8 @@ set -v
 [ -d docroot ] && [ ! -e web ] && ln -s docroot web
 
 # Copy stuff that is trivial or needed before the build.
-rsync -rv "$ourDir/copy/" "$targetDir/"
-rsync -rv "$ourDir/copy$major/" "$targetDir/"
+rsync -rvl "$ourDir/copy/" "$targetDir/"
+rsync -rvl "$ourDir/copy$major/" "$targetDir/"
 
 # Scaffold (copy if not exists).
 rsync -rv --ignore-existing "$ourDir/scaffold/" "$targetDir/"
