@@ -12,10 +12,10 @@ ourDir=$(dirname "$binDir")
 set -v
 
 # Copy our stuff.
-rsync -rv "$ourDir/copyToComposerRoot/" "$targetDir/"
+rsync -rv "$ourDir/copy/" "$targetDir/"
 
 # Symlink our stuff.
-symlinkDir=$ourDir/symlinkToComposerRoot
+symlinkDir=$ourDir/symlink
 for relFile in $(cd $symlinkDir; find . -type f); do
   mkdir -p $(dirname $targetDir/$relFile)
   ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"

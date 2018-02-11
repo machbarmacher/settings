@@ -13,8 +13,8 @@ set -v
 
 # Copy our stuff.
 # We can't symlink this as it is needed before it's target is there.
-cp -f "$ourDir/copyToComposerRoot/wodby.yml" "$targetDir/"
-cp -f "$ourDir/copyToComposerRoot/.gitlab-ci.yml" "$targetDir/"
+cp -f "$ourDir/copy/wodby.yml" "$targetDir/"
+cp -f "$ourDir/copy/.gitlab-ci.yml" "$targetDir/"
 # We can't symlink this as wodby checks it before the build process.
-cp -f "$ourDir/copyToComposerRoot/web/sites/default/settings.php" "$targetDir/web/sites/default/"
+cp -f "$ourDir/copy/web/sites/default/settings.php" "$targetDir/web/sites/default/"
 
