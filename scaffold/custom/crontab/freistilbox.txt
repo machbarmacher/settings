@@ -1,5 +1,5 @@
 # The build script will set the $SERVER variable.
-13-59/15 * * * * cd current/docroot && current/vendor/bin/drush @sites cron -y 2>&1 >~/cron.log
-@daily [ "$SERVER" ] && ~/current/vendor/bin/letsencrypta --webroot=~/current/docroot --cert-mailto=support@freistil.it -v $SERVER 2>&1 >~/letsencrypta.log
+13-59/15 * * * * cd current/docroot && drush @sites cron -y 2>&1 >~/cron.log
+@daily [ "$SERVER_NAME" ] && ~/current/vendor/bin/letsencrypta --webroot=$HOME/current/docroot --cert-mailto=support@freistil.it --email=webmaster@machbarmacher.net -v $SERVER_NAME 2>&1 >~/letsencrypta.log
 10-59/15 * * * * { true | openssl s_client -connect SERVER:80 2>/dev/null |openssl x509 -noout -checkend 0; } && { touch ssl; rm -f nossl; } || { touch nossl; rm -f ssl; } 2>&1 >/dev/null
 
