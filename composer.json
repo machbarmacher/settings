@@ -10,5 +10,5 @@
     ],
     "minimum-stability": "dev",
     "require": {},
-    "bin": ["bin/settings-init", "bin/settings-update", "bin/settings-hashsalt"]
+    "bin": ["bin/settings-init", "bin/settings-hashsalt"]
 }
