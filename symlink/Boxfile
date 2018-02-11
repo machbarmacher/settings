@@ -3,10 +3,10 @@ shared_folders:
   - docroot/sites/default/files
   - logs
 env_specific_files:
-  settings/server.php:
+  settings/generated/server.php:
     live: server-freistilbox.php
     test: server-freistilbox.php
-  settings/solr.php:
+  settings/generated/solr.php:
     live: solr-freistilbox.php
     test: solr-freistilbox.php
 

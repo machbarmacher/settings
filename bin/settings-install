@@ -32,7 +32,7 @@ for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
 done
 
 # Create Hash salt.
-[ -f "$targetDir/custom/hash_salt.php" ] || "$binDir/settings-hashsalt" "$targetDir/custom/hash_salt.php"
+[ -f "$targetDir/settings/generated/custom/hash_salt.php" ] || "$binDir/settings-hashsalt" "$targetDir/settings/generated/custom/hash_salt.php"
 
 # Copy container yamls.
 [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml

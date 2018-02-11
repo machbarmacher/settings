@@ -26,7 +26,7 @@ stages:
     - SITE_SERVER=$(echo "$SITE_URL" | cut -d'/' -f3)
     - '[[ $SITE_SERVER ]] && echo "SITE_SERVER=$SITE_SERVER" || { echo "Unrecognized server name in $SITE_URL_VAR."; exit 1; }'
     # crontab.freistilbox file.
-    - '[[ -f custom/crontab/freistilbox.txt ]] && { CRONTAB=$(echo SERVER_NAME=$SITE_SERVER; cat custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
+    - '[[ -f settings/custom/crontab/freistilbox.txt ]] && { CRONTAB=$(echo SERVER_NAME=$SITE_SERVER; cat settings/custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
     # Prepare
     - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s) # Prepare env.
@@ -43,7 +43,7 @@ stages:
     - '[ -f docroot ] || ln -s web docroot'
     # Set siteurl.php as freistilbox does not know its URL :-(.
     - >-
-     { echo "<?php"; echo "return '$SITE_URL';"; } >settings/siteurl.php
+     { echo "<?php"; echo "return '$SITE_URL';"; } >settings/generated/local/siteurl.php
     # Deploy
     - git config --global user.email "$GITLAB_USER_EMAIL"
     - git config --global user.name "$GITLAB_USER_NAME"

@@ -7,7 +7,7 @@ require glob('../config/drupal/settings-d8-db*.php')[0];
 $settings['file_private_path'] = "../private";
 @include '../private/_settings/settings.local.php';
 
-$siteurl = '../settings/siteurl.php';
+$siteurl = require '../settings/generated/local/siteurl.php';
 $isLive = strpos($siteurl, '://test.') !== FALSE;
 
 // Redirect to HTTP(S) if necessary.
