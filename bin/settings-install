@@ -39,11 +39,5 @@ done
 
 # Pin php version to 7.0 (FSB) to prevent 7.1 packages in composer.lock.
 composer config platform.php 7.0.17
-echo "Wanna update packages?"
-select yn in "Yes" "No"; do
-  case $yn in
-      Yes ) composer update; break;;
-      No ) break;;
-  esac
-done
+#NOTE: Run 'composer update' to get rid of PHP7.1+ packages that bomb your PHP7.0 builds.
 
