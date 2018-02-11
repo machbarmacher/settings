@@ -2,7 +2,7 @@
 set -e
 
 if [ ! -f composer.json ] || [ "$#" -ne 1 ] || [[ ! "$1" =~ ^(7|8)$ ]]; then echo "Usage (in composer root): $0 [DrupalMajorVersion]"; exit 1; fi
-major=$1
+major="$1"
 
 # Dirs.
 targetDir=.
@@ -19,13 +19,13 @@ rsync -rv --ignore-existing "$ourDir/scaffold/" "$targetDir/"
 
 # Symlink.
 symlinkDir="$ourDir/symlink"
-for relFile in $(cd $symlinkDir; find . -type f); do
-  mkdir -p $(dirname $targetDir/$relFile)
+for relFile in $(cd "$symlinkDir"; find . -type f); do
+  mkdir -p $(dirname "$targetDir/$relFile")
   ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
 done
 
 # Create Hash salt.
-[-f $targetDir/custom/hash_salt.php ] || $binDir/settings-hashsalt $targetDir/custom/hash_salt.php
+[-f "$targetDir/custom/hash_salt.php" ] || "$binDir/settings-hashsalt" "$targetDir/custom/hash_salt.php"
 
 # Copy container yamls.
 [-f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml
