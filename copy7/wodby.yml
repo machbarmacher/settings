@@ -8,11 +8,11 @@ pipeline:
   - name: Symlink our solr.
     command: ln -sf solr-wodby.php settings/solr.php
   - name: Update database
-    command: drush -y updb
-    directory: web
+    command: drush -y updb --cache-clear=0
+    directory: docroot
     only_if: test "$(drush status --fields=bootstrap)"
   - name: Import config
-    command: drush -y cim
-    directory: web
+    command: drush -y en master && drush -y master-exec && drush -y fra && drush -y language-refresh && drush cc all
+    directory: docroot
     only_if: test "$(drush status --fields=bootstrap)" && test -f ../config-sync/core.extension.yml
 

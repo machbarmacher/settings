@@ -1,0 +1,81 @@
+image: tetraweb/php:7.0 # Important: Same as target platform.
+stages:
+  - deploy
+.deploy: &deploy
+  stage: deploy
+  script:
+    # Expects variables
+    # REPO_BRANCH - defaults to master.
+    - '[[ $REPO_BRANCH ]] || REPO_BRANCH=master'
+    # SSH_PUBKEYS - use ssh-keyscan.
+    - 'echo "SSH_PUBKEYS=''$SSH_PUBKEYS''"'
+    # SSH_PRIVATE_KEY - Private ssh key to push with.
+    - '[[ $SSH_PRIVATE_KEY ]] || { echo "Missing SSH_PRIVATE_KEY."; exit 1; }'
+    # REPO_URL_FOO (e.g. REPO_URL_LIVE)- URL to git deployment repo.
+    - REPO_URL_VAR="REPO_URL_${CI_COMMIT_REF_NAME^^}"
+    - REPO_URL=${!REPO_URL_VAR}
+    - '[[ $REPO_URL ]] && echo "REPO_URL=$REPO_URL" || { echo "Missing $REPO_URL_VAR."; exit 1; }'
+    # SSH_URL_FOO (e.g. SSH_URL_LIVE)- URL to SSH.
+    - SSH_URL_VAR="SSH_URL_${CI_COMMIT_REF_NAME^^}"
+    - SSH_URL=${!SSH_URL_VAR}
+    - '[[ $SSH_URL ]] && echo "SSH_URL=$SSH_URL" || { echo "Missing $SSH_URL_VAR."; exit 1; }'
+    # SITE_URL_FOO (e.g. SITE_URL_LIVE)- URL to site.
+    - SITE_URL_VAR="SITE_URL_${CI_COMMIT_REF_NAME^^}"
+    - SITE_URL=${!SITE_URL_VAR}
+    - '[[ $SITE_URL ]] && echo "SITE_URL=$SITE_URL" || { echo "Missing $SITE_URL_VAR."; exit 1; }'
+    - SITE_SERVER=$(echo "$SITE_URL" | cut -d'/' -f3)
+    - '[[ $SITE_SERVER ]] && echo "SITE_SERVER=$SITE_SERVER" || { echo "Unrecognized server name in $SITE_URL_VAR."; exit 1; }'
+    # crontab.freistilbox file.
+    - '[[ -f custom/crontab/freistilbox.txt ]] && { CRONTAB=$(echo SERVER=$SITE_SERVER; cat custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
+    # Prepare
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval $(ssh-agent -s) # Prepare env.
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '>>~/.ssh/known_hosts echo "$SSH_PUBKEYS"'
+    # Build
+    # Install 'bin' later as e.g. letsencrypta symlink depends on settings.
+    - apt-get update -y && apt-get install --yes unzip
+    - COMPOSER_ALLOW_SUPERUSER=1
+    - composer global require hirak/prestissimo bamarni/composer-bin-plugin --no-progress --optimize-autoloader --prefer-dist
+    - composer install --no-progress --optimize-autoloader --prefer-dist
+    - composer bin all install --no-progress --optimize-autoloader --prefer-dist
+    - '[ -f docroot ] || ln -s web docroot'
+    # Set siteurl.php as freistilbox does not know its URL :-(.
+    - >-
+     { echo "<?php"; echo "return '$SITE_URL';"; } >settings/siteurl.php
+    # Deploy
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - git remote add REPO $REPO_URL
+    - git fetch REPO $REPO_BRANCH
+    - git checkout -B TMP_DEPLOYMENT_BRANCH
+    - git reset --soft REPO/$REPO_BRANCH
+    - find * -name .git -type d -prune |xargs -rt rm -rf
+    - git ls-files --stage|grep ^160000||true|tee|cut -f2|xargs -rt git rm --cached
+    - git add --all --force .
+    - git commit -m "Autodeploy" --allow-empty
+    - git push REPO HEAD:$REPO_BRANCH
+    - COMMIT=$(git rev-parse HEAD)
+    # Wait
+    - (for i in {1..10}; do [ "$COMMIT" = "$(ssh $SSH_URL 'basename $(readlink .deploy/current)')" ] && exit; echo "Retry $i"; sleep 2; done; exit 1); sleep 3
+    # Revert
+    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || ../vendor/bin/drush -y updb'
+    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || [ ! -f ../config-sync/core.extension.yml ] || ../vendor/bin/drush -y en master && ../vendor/bin/drush -y master-exec && ../vendor/bin/drush -y fra && ../vendor/bin/drush -y language-refresh && ../vendor/bin/drush cc all'
+    # Set crontab
+    - ssh $SSH_URL "echo '$CRONTAB' |{ crontab -; } "
+deploy-live:
+  <<: *deploy
+  environment:
+    name: live
+    url: $SITE_URL_LIVE
+  only:
+    - live
+deploy-test:
+  <<: *deploy
+  environment:
+    name: test
+    url: $SITE_URL_TEST
+  only:
+    - test
+
