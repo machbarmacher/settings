@@ -13,15 +13,18 @@ set -v
 
 # Copy stuff that is trivial or needed before the build.
 rsync -rv "$ourDir/copy/" "$targetDir/"
+rsync -rv "$ourDir/copy$major/" "$targetDir/"
 
 # Scaffold (copy if not exists).
 rsync -rv --ignore-existing "$ourDir/scaffold/" "$targetDir/"
+rsync -rv --ignore-existing "$ourDir/scaffold$major/" "$targetDir/"
 
 # Symlink.
-symlinkDir="$ourDir/symlink"
-for relFile in $(cd "$symlinkDir"; find . -type f); do
-  mkdir -p $(dirname "$targetDir/$relFile")
-  ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
+for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
+  for relFile in $(cd "$symlinkDir"; find . -type f); do
+    mkdir -p $(dirname "$targetDir/$relFile")
+    ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
+  done
 done
 
 # Create Hash salt.
