@@ -1,13 +1,8 @@
 #!/bin/bash
 set -e
 
-echo "This will install settings. Are you in composer root?"
-select yn in "Yes" "No"; do
-  case $yn in
-      Yes ) echo "OK..."; break;;
-      No ) exit;;
-  esac
-done
+if [ ! -f composer.json ] || [ "$#" -ne 1 ] || [[ ! "$1" =~ ^(7|8)$ ]]; then echo "Usage (in composer root): $0 [DrupalMajorVersion]"; exit 1; fi
+major=$1
 
 # Dirs.
 targetDir=.
