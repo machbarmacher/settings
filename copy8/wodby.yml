@@ -8,7 +8,8 @@ pipeline:
   - name: Symlink our solr.
     command: ln -sf solr-wodby.php settings/generated/solr.php
   - name: Scaffold our siteurl.
-    command: { echo '<?php'; echo "return getenv('WODBY_URL_PRIMARY');"; } >settings/generated/local/siteurl.php
+    command: |
+      { echo '<?php'; echo "return getenv('WODBY_URL_PRIMARY');"; } >settings/generated/local/siteurl.php
   - name: Update database
     command: drush -y updb
     directory: docroot
