@@ -2,7 +2,9 @@ pipeline:
   - name: Revert wodby's changes to settings, but don't fail if no file committed.
     command: git checkout HEAD `readlink docroot`/sites/default/settings.php||true
   - name: Composer install.
-    command: composer install --no-progress --optimize-autoloader --prefer-dist
+    command: composer install --no-dev --no-progress --optimize-autoloader --prefer-dist
+  - name: Composer bin install.
+    command: composer bin all install --no-dev --no-progress --optimize-autoloader --prefer-dist
   - name: Symlink our settings.
     command: ln -sf server-wodby.php settings/generated/server.php
   - name: Symlink our solr.
