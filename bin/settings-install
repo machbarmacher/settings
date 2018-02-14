@@ -9,19 +9,19 @@ targetDir=.
 binDir=$(dirname $(realpath "$0"))
 ourDir=$(dirname "$binDir")
 
-set -v
+#set -v
 
 # Ensure web and docroot dirs.
 [ -d web ] && [ ! -e docroot ] && ln -s web docroot
 [ -d docroot ] && [ ! -e web ] && ln -s docroot web
 
 # Copy stuff that is trivial or needed before the build.
-rsync -rvl "$ourDir/copy/" "$targetDir/"
-rsync -rvl "$ourDir/copy$major/" "$targetDir/"
+rsync -rl "$ourDir/copy/" "$targetDir/"
+rsync -rl "$ourDir/copy$major/" "$targetDir/"
 
 # Scaffold (copy if not exists).
-rsync -rv --ignore-existing "$ourDir/scaffold/" "$targetDir/"
-rsync -rv --ignore-existing "$ourDir/scaffold$major/" "$targetDir/"
+rsync -r --ignore-existing "$ourDir/scaffold/" "$targetDir/"
+rsync -r --ignore-existing "$ourDir/scaffold$major/" "$targetDir/"
 
 # Symlink.
 for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
