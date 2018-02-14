@@ -32,7 +32,22 @@ for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
 done
 
 # Create Hash salt.
-[ -f "$targetDir/settings/generated/custom/hash_salt.php" ] || "$binDir/settings-hashsalt" "$targetDir/settings/generated/custom/hash_salt.php"
+hash_salt_file="$targetDir/settings/generated/custom/hash_salt.php"
+generate_hash_salt() {
+  "$binDir/settings-hashsalt" "$hash_salt_file"
+}
+if [ -f "$hash_salt_file" ]
+then
+  echo "Hash salt exists. Overwrite to make a different site?"
+  select yn in "Yes" "No"; do
+      case $yn in
+          Yes ) generate_hash_salt; break;;
+          No ) exit;;
+      esac
+  done
+else
+  generate_hash_salt
+fi
 
 # Copy container yamls.
 [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml
