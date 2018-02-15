@@ -1,5 +1,5 @@
 # The build script will set the $SERVER_NAME variable.
-*/15 * * * * cd current/docroot && ../vendor/bin/drush @sites cron -y 2>&1 >~/cron.log
-@daily # [ "$SERVER_NAME" ] && ~/current/vendor/bin/letsencrypta --webroot=$HOME/current/docroot --cert-mailto=support@freistil.it --email=webmaster@machbarmacher.net -v $SERVER_NAME 2>&1 >~/letsencrypta.log
+*/15 * * * * cd current/docroot && ../vendor/bin/drush @sites cron -y >~/cron.log 2>&1
+@daily # [ "$SERVER_NAME" ] && ~/current/vendor/bin/letsencrypta --webroot=$HOME/current/docroot --cert-mailto=support@freistil.it --email=webmaster@machbarmacher.net -v $SERVER_NAME >~/letsencrypta.log 2>&1
 10-59/15 * * * * if { ( openssl s_client -connect "$SERVER_NAME:80" 2>/dev/null ) | ( openssl x509 -noout -checkend 0 2>/dev/null ) }; then touch $HOME/ssl; rm -f $HOME/nossl; else touch $HOME/nossl; rm -f $HOME/ssl; fi 2>/dev/null
 
