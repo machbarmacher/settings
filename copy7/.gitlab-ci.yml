@@ -52,7 +52,7 @@ stages:
     - git checkout -B TMP_DEPLOYMENT_BRANCH
     - git reset --soft REPO/$REPO_BRANCH
     - find * -name .git -type d -prune |xargs -rt rm -rf
-    - git ls-files --stage|grep ^160000||true|tee|cut -f2|xargs -rt git rm --cached
+    - git ls-files --stage|(grep ^160000||true)|tee|cut -f2|xargs -rt git rm --cached
     - git add --all --force .
     - git commit -m "Autodeploy" --allow-empty
     - git push REPO HEAD:$REPO_BRANCH
