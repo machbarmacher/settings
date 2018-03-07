@@ -16,7 +16,24 @@ pipeline:
     command: drush -y updb --cache-clear=0
     directory: docroot
     only_if: test "$(drush status --fields=bootstrap)"
-  - name: Import config
-    command: drush -y en master && drush -y master-exec && drush -y fra && drush -y language-refresh && drush cc all
+  - name: Enable master
+    command: drush -y en master || true
     directory: docroot
     only_if: test "$(drush status --fields=bootstrap)"
+  - name: Master-exec
+    command: '! drush help master-exec || drush -y master-exec'
+    directory: docroot
+    only_if: test "$(drush status --fields=bootstrap)"
+  - name: Revert features, if possible.
+    command: '! drush help fra || drush -y fra'
+    directory: docroot
+    only_if: test "$(drush status --fields=bootstrap)"
+  - name: Refresh languages, if possible
+    command: '! drush help language-refresh || drush -y language-refresh'
+    directory: docroot
+    only_if: test "$(drush status --fields=bootstrap)"
+  - name: clear cache
+    command: drush cc all
+    directory: docroot
+    only_if: test "$(drush status --fields=bootstrap)"
+
