@@ -1,5 +1,7 @@
 <?php
-$options['l'] = require '../settings/generated/local/siteurl.php';
+if (defined('DRUPAL_ROOT')) {
+  $options['l'] = require DRUPAL_ROOT . '/../settings/generated/local/siteurl.php';
+}
 
 // Leave out unnecessary DB data in sql-sync and sql-dump.
 $options['structure-tables']['common'] = array('cache', 'cache_*', 'cachetags', 'history', 'sessions', 'watchdog');
