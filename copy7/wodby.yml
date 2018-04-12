@@ -3,7 +3,7 @@ pipeline:
     command: git checkout HEAD `readlink docroot||echo docroot`/sites/default/settings.php||true
   - name: Composer install.
     command: composer install --no-dev --no-progress --optimize-autoloader --prefer-dist
-  - name: Composer bin install.
+  - name: Composer bin all install.
     command: '! composer help bin || composer bin all install --no-dev --no-progress --optimize-autoloader --prefer-dist'
   - name: Symlink our settings.
     command: ln -sf server-wodby.php settings/generated/server.php
