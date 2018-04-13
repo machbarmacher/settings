@@ -36,4 +36,6 @@ pipeline:
     command: drush cc all
     directory: docroot
     only_if: test "$(drush status --fields=bootstrap)"
-
+  - name: On dev make www-writable
+    only_if: test "WODBY_INSTANCE_TYPE" -eq "dev"
+    command: chown :www-data -R . && find . -type d -user wodby|xargs chmod 775 && find . -type f -user wodby|xargs chmod 664
