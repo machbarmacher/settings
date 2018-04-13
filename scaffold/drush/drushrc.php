@@ -1,6 +1,6 @@
 <?php
 if (defined('DRUPAL_ROOT')) {
-  $options['l'] = require DRUPAL_ROOT . '/../settings/generated/local/siteurl.php';
+  $options['l'] = require DRUPAL_ROOT . '/../settings/generated/siteurl.php';
 }
 
 // Leave out unnecessary DB data in sql-sync and sql-dump.

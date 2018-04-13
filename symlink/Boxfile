@@ -9,4 +9,7 @@ env_specific_files:
   settings/generated/solr.php:
     live: solr-freistilbox.php
     test: solr-freistilbox.php
+  settings/generated/siteurl.php:
+    live: siteurl-freistilbox.php
+    test: siteurl-freistilbox.php
 
