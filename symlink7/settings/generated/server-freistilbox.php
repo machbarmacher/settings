@@ -2,6 +2,11 @@
 
 $siteConfig = json_decode(file_get_contents('../config/site-config.json'), TRUE);
 $instanceName = $siteConfig['environment'];
+$protocol = is_file('../private/_envx.d/PROTO') ?
+  file_get_contents('../private/_envx.d/PROTO') : 'http';
+$domain = $siteConfig['main_domain'];
+$siteUrl = "$protocol://$domain";
+$isLive = strpos($siteUrl, '://test.') !== FALSE;
 
 require '../config/drupal/settings-d7-site.php';
 require glob('../config/drupal/settings-d7-db*.php')[0];
@@ -12,9 +17,6 @@ $settings['file_private_path'] = '../private/default';
 if (!file_exists('../private/default')) { mkdir('../private/default'); }
 
 @include '../private/_settings/settings.local.php';
-
-$siteurl = require '../settings/generated/local/siteurl.php';
-$isLive = strpos($siteurl, '://test.') !== FALSE;
 
 // Redirect to HTTP(S) if necessary.
 if (PHP_SAPI !== 'cli') {
