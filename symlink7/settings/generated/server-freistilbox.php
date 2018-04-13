@@ -1,11 +1,7 @@
 <?php
 
-if ($siteConfig = json_decode(file_get_contents('../config/site-config.json'), TRUE)) {
-  $instanceName = $siteConfig['environment'];
-}
-else {
-  $instanceName = '???';
-}
+$siteConfig = json_decode(file_get_contents('../config/site-config.json'), TRUE);
+$instanceName = $siteConfig['environment'];
 
 require '../config/drupal/settings-d7-site.php';
 require glob('../config/drupal/settings-d7-db*.php')[0];
