@@ -1,4 +1,12 @@
 <?php
+
+if ($siteConfig = json_decode(file_get_contents('../config/site-config.json'), TRUE)) {
+  $instanceName = $siteConfig['environment'];
+}
+else {
+  $instanceName = '???';
+}
+
 require '../config/drupal/settings-d7-site.php';
 require glob('../config/drupal/settings-d7-db*.php')[0];
 // This breaks the site without memcache module.
@@ -23,4 +31,3 @@ if (PHP_SAPI !== 'cli') {
     }
   }
 }
-
