@@ -21,5 +21,5 @@ if (!empty($isLive)) {
 #$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/services.cacheheaders.yml';
 
 // Set solr server for index with name "content". The required file is auto-symlinked.
-// $config['search_api.server.content'] = require '../settings/solr.php';
+// $config['search_api.server.content'] = require '../settings/generated/solr.php';
 
