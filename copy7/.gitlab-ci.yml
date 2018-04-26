@@ -1,4 +1,4 @@
-image: tetraweb/php:7.0 # Important: Same as target platform.
+image: tetraweb/php:7.1
 stages:
   - deploy
 .deploy: &deploy
@@ -38,8 +38,8 @@ stages:
     - apt-get update -y && apt-get install --yes unzip
     - COMPOSER_ALLOW_SUPERUSER=1
     - composer global require hirak/prestissimo bamarni/composer-bin-plugin --no-progress --optimize-autoloader --prefer-dist
-    - composer install --no-dev --no-progress --optimize-autoloader --prefer-dist
-    - '! composer help bin || composer bin all install --no-dev --no-progress --optimize-autoloader --prefer-dist'
+    - composer install --ignore-platform-reqs --no-dev --no-progress --optimize-autoloader --prefer-dist
+    - '! composer help bin >/dev/null || composer bin all install --ignore-platform-reqs --no-dev --no-progress --optimize-autoloader --prefer-dist'
     - '[ -f docroot ] || ln -s web docroot'
     # Deploy
     - git config --global user.email "$GITLAB_USER_EMAIL"
