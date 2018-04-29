@@ -57,4 +57,4 @@ else
 fi
 
 # Copy D8 container yamls.
-[ "$major" -eq 8  ] && [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml
+[ "$major" -eq 8  ] && ( [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml )
