@@ -23,11 +23,18 @@ rsync -r --links --keep-dirlinks "$ourDir/copy$major/" "$targetDir/"
 rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold/" "$targetDir/"
 rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold$major/" "$targetDir/"
 
+# Replacement for ln -r in busybox. https://stackoverflow.com/a/24848739/606859
+function relative() {
+s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ "${d#$s/}" == "${d}" ]
+do s=$(dirname $s);b="../${b}"; done; echo ${b}${d#$s/}
+}
+
 # Symlink.
 for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
+  relSymlinkDir=$(relative $symlinkDir $targetDir)
   for relFile in $(cd "$symlinkDir"; find . -type f); do
     mkdir -p $(dirname "$targetDir/$relFile")
-    ln -rsf "$symlinkDir/$relFile" "$targetDir/$relFile"
+    ln -sf "$symlinkDir/$relFile" "$targetDir/$relFile"
   done
 done
 
