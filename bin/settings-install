@@ -48,7 +48,7 @@ generate_hash_salt() {
 }
 if [ -f "$hash_salt_file" ]
 then
-  echo "Hash salt exists. To generate: \"$binDir/settings-hashsalt\" \"$hash_salt_file\""
+  echo "Hash salt exists. To generate: \"$(dirname $0)/settings-hashsalt\" \"$hash_salt_file\""
 else
   generate_hash_salt
 fi
