@@ -85,6 +85,7 @@ for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
   for filePath in $(cd "$symlinkDir"; find . -type f); do
     filePath=${filePath#./}
     fileDir=$(dirname "$targetDir/$filePath")
+    fileDir=${fileDir#./}
     mkdir -p $fileDir
     relSymlinkDir=$(relpath $(absolute "$fileDir") $(absolute "$symlinkDir"))
     ln -sf "$relSymlinkDir/$filePath" "$targetDir/$filePath"
