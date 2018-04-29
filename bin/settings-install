@@ -27,17 +27,26 @@ rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold/" "$targetDir/"
 rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold$major/" "$targetDir/"
 
 # Replacement for ln -r in busybox. https://stackoverflow.com/a/24848739/606859
-function relative() {
-s=$(cd ${1%%/};pwd); d=$(cd $2;pwd); while [ "${d#$s/}" == "${d}" ]
-do s=$(dirname $s);b="../${b}"; done; echo ${b}${d#$s/}
+function absolute() {
+if [ ${1:0:1} = '/' ]; then echo -e "$1"; else local p="$(pwd)/$1"; echo -e ${p%/.}; fi
+}
+function relativeto() {
+local basedir=$(absolute $1); basedir=${basedir%%/}; local path=$(absolute $2); local back=""
+while [ "${path#$basedir}" == "${path}" ]
+do basedir=$(dirname $basedir); back="../${back}"; done
+local relpath=${path#$basedir}; relpath=${relpath##/}; back=${back%%/}
+local result=${back}/$relpath
+result=${result#/};result=${result%/};echo $result
 }
 
 # Symlink.
 for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
-  relSymlinkDir=$(relative $symlinkDir $targetDir)
-  for relFile in $(cd "$symlinkDir"; find . -type f); do
-    mkdir -p $(dirname "$targetDir/$relFile")
-    ln -sf "$symlinkDir/$relFile" "$targetDir/$relFile"
+  for filePath in $(cd "$symlinkDir"; find . -type f); do
+    filePath=${filePath#./}
+    fileDir=$(dirname "$targetDir/$filePath")
+    mkdir -p $fileDir
+    relSymlinkDir=$(relativeto "$fileDir" "$symlinkDir")
+    ln -sf "$relSymlinkDir/$filePath" "$targetDir/$filePath"
   done
 done
 
