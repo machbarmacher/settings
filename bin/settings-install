@@ -26,17 +26,58 @@ rsync -r --links --keep-dirlinks "$ourDir/copy$major/" "$targetDir/"
 rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold/" "$targetDir/"
 rsync -r --ignore-existing --keep-dirlinks "$ourDir/scaffold$major/" "$targetDir/"
 
-# Replacement for ln -r in busybox. https://stackoverflow.com/a/24848739/606859
+# Replacement for ln -r in busybox. https://stackoverflow.com/a/2565106/606859
 function absolute() {
 if [ ${1:0:1} = '/' ]; then echo -e "$1"; else local p="$(pwd)/$1"; echo -e ${p%/.}; fi
 }
-function relativeto() {
-local basedir=$(absolute $1); basedir=${basedir%%/}; local path=$(absolute $2); local back=""
-while [ "${path#$basedir}" == "${path}" ]
-do basedir=$(dirname $basedir); back="../${back}"; done
-local relpath=${path#$basedir}; relpath=${relpath##/}; back=${back%%/}
-local result=${back}/$relpath
-result=${result#/};result=${result%/};echo $result
+function relpath() {
+# usage: relpath from to
+
+if [[ "$1" == "$2" ]]
+then
+    echo "."
+    exit
+fi
+
+IFS="/"
+
+local current=($1)
+local absolute=($2)
+
+local abssize=${#absolute[@]}
+local cursize=${#current[@]}
+local level
+local i
+local newpath
+
+while [[ ${absolute[level]} == ${current[level]} ]]
+do
+    (( level++ ))
+    if (( level > abssize || level > cursize ))
+    then
+        break
+    fi
+done
+
+for ((i = level; i < cursize; i++))
+do
+    if ((i > level))
+    then
+        newpath=$newpath"/"
+    fi
+    newpath=$newpath".."
+done
+
+for ((i = level; i < abssize; i++))
+do
+    if [[ -n $newpath ]]
+    then
+        newpath=$newpath"/"
+    fi
+    newpath=$newpath${absolute[i]}
+done
+
+echo "$newpath"
 }
 
 # Symlink.
@@ -45,7 +86,7 @@ for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
     filePath=${filePath#./}
     fileDir=$(dirname "$targetDir/$filePath")
     mkdir -p $fileDir
-    relSymlinkDir=$(relativeto "$fileDir" "$symlinkDir")
+    relSymlinkDir=$(relpath $(absolute "$fileDir") $(absolute "$symlinkDir"))
     ln -sf "$relSymlinkDir/$filePath" "$targetDir/$filePath"
   done
 done
