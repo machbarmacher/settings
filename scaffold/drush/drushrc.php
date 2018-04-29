@@ -1,5 +1,5 @@
 <?php
-if (defined('DRUPAL_ROOT')) {
+if (defined('DRUPAL_ROOT') && is_file(DRUPAL_ROOT . '/../settings/generated/siteurl.php')) {
   $options['l'] = require DRUPAL_ROOT . '/../settings/generated/siteurl.php';
 }
 
