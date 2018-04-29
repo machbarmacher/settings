@@ -58,8 +58,3 @@ fi
 
 # Copy D8 container yamls.
 [ "$major" -eq 8  ] && [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml
-
-# Pin php version to 7.0 (FSB) to prevent 7.1 packages in composer.lock.
-composer config platform.php 7.0.17
-# NOTE: Run 'composer update' to get rid of PHP7.1+ packages that bomb your PHP7.0 builds.
-
