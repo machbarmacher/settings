@@ -45,13 +45,7 @@ generate_hash_salt() {
 }
 if [ -f "$hash_salt_file" ]
 then
-  echo "Hash salt exists. Overwrite to make a different site?"
-  select yn in "Yes" "No"; do
-      case $yn in
-          Yes ) generate_hash_salt; break;;
-          No ) exit;;
-      esac
-  done
+  echo "Hash salt exists. To generate: \"$binDir/settings-hashsalt\" \"$hash_salt_file\""
 else
   generate_hash_salt
 fi
