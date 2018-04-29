@@ -11,6 +11,9 @@ ourDir=$(dirname "$binDir")
 
 #set -v
 
+# Migrations.
+[ -f drush/drushrc.php ] && sed -i -e "s:'../settings/generated/local/siteurl.php':'../settings/generated/siteurl.php':g" drush/drushrc.php
+
 # Ensure web and docroot dirs.
 [ -d web ] && [ ! -e docroot ] && ln -s web docroot
 [ -d docroot ] && [ ! -e web ] && ln -s docroot web
