@@ -19,12 +19,6 @@ stages:
     - SSH_URL_VAR="SSH_URL_${CI_COMMIT_REF_NAME^^}"
     - SSH_URL=${!SSH_URL_VAR}
     - '[[ $SSH_URL ]] && echo "SSH_URL=$SSH_URL" || { echo "Missing $SSH_URL_VAR."; exit 1; }'
-    # SITE_URL_FOO (e.g. SITE_URL_LIVE)- URL to site.
-    - SITE_URL_VAR="SITE_URL_${CI_COMMIT_REF_NAME^^}"
-    - SITE_URL=${!SITE_URL_VAR}
-    - '[[ $SITE_URL ]] && echo "SITE_URL=$SITE_URL" || { echo "Missing $SITE_URL_VAR."; exit 1; }'
-    - SITE_SERVER=$(echo "$SITE_URL" | cut -d'/' -f3)
-    - '[[ $SITE_SERVER ]] && echo "SITE_SERVER=$SITE_SERVER" || { echo "Unrecognized server name in $SITE_URL_VAR."; exit 1; }'
     # crontab.freistilbox file.
     - '[[ -f settings/custom/crontab/freistilbox.txt ]] && { CRONTAB=$(echo SERVER_NAME=$SITE_SERVER; cat settings/custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
     # Prepare
@@ -65,14 +59,14 @@ deploy-live:
   <<: *deploy
   environment:
     name: live
-    url: $SITE_URL_LIVE
+    url: $SITE_URL_LIVE # for GitLab UI Link
   only:
     - live
 deploy-test:
   <<: *deploy
   environment:
     name: test
-    url: $SITE_URL_TEST
+    url: $SITE_URL_TEST # for GitLab UI Link
   only:
     - test
 
