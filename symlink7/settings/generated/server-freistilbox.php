@@ -5,7 +5,7 @@ $instanceName = $siteConfig['environment'];
 $isLive = $siteConfig['environment'] === 'live';
 $siteUrl = require '../settings/generated/siteurl.php';
 
-$settings['trusted_host_patterns'] = array_map(function ($domain) {
+$conf['trusted_host_patterns'] = array_map(function ($domain) {
   return '^' . preg_quote($domain) . '$';
 }, array_merge([$siteConfig['main_domain']], $siteConfig['alias_domains']));
 
@@ -14,7 +14,7 @@ require glob('../config/drupal/settings-d7-db*.php')[0];
 // This breaks the site without memcache module.
 // require '../config/drupal/settings-d7-memcache.php';
 
-$settings['file_private_path'] = '../private/default';
+$conf['file_private_path'] = '../private/default';
 if (!file_exists('../private/default')) { mkdir('../private/default'); }
 
 @include '../private/_settings/settings.local.php';

@@ -14,7 +14,7 @@ require glob('../config/drupal/settings-d8-db*.php')[0];
 // This breaks the site without memcache module.
 // require '../config/drupal/settings-d8-memcache.php';
 
-$conf['file_private_path'] = '../private/default';
+$settings['file_private_path'] = '../private/default';
 if (!file_exists('../private/default')) { mkdir('../private/default'); }
 
 @include '../private/_settings/settings.local.php';
