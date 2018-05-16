@@ -14,7 +14,7 @@
 /web/themes/contrib/
 /web/profiles/contrib/
 /web/libraries/
-/vendor-bin/
+/vendor-bin/*/vendor/
 
 # Ignore sensitive information
 /web/sites/*/settings.php
