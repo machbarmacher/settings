@@ -92,6 +92,13 @@ for symlinkDir in "$ourDir/symlink" "$ourDir/symlink$major"; do
   done
 done
 
+# Copy D8 container yamls.
+[ "$major" -eq 8  ] && ( [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml )
+
+echo "OK, updated stuff."
+
+echo "TODO: On old sites delete settings/custom/crontab/freistilbox.txt, re-run this script and merge customizations."
+
 # Create Hash salt.
 hash_salt_file="$targetDir/settings/generated/custom/hash_salt.php"
 generate_hash_salt() {
@@ -103,6 +110,3 @@ then
 else
   generate_hash_salt
 fi
-
-# Copy D8 container yamls.
-[ "$major" -eq 8  ] && ( [ -f web/sites/default/services.yml ] || cp web/sites/default/default.services.yml web/sites/default/services.yml )
