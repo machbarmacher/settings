@@ -20,7 +20,7 @@ stages:
     - SSH_URL=${!SSH_URL_VAR}
     - '[[ $SSH_URL ]] && echo "SSH_URL=$SSH_URL" || { echo "Missing $SSH_URL_VAR."; exit 1; }'
     # crontab.freistilbox file.
-    - '[[ -f settings/custom/crontab/freistilbox.txt ]] && { CRONTAB=$(echo SERVER_NAME=$SITE_SERVER; cat settings/custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
+    - '[[ -f settings/custom/crontab/freistilbox.txt ]] && { CRONTAB=$(cat settings/custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
     # Prepare
     - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s) # Prepare env.
