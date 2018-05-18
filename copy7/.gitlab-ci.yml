@@ -52,7 +52,7 @@ stages:
     - (for i in {1..10}; do [ "$COMMIT" = "$(ssh $SSH_URL 'basename $(readlink .deploy/current)')" ] && exit; echo "Retry $i"; sleep 2; done; exit 1); sleep 3
     # Revert
     - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || ../vendor/bin/drush -y updb'
-    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || [ ! -f ../config-sync/core.extension.yml ] || { ../vendor/bin/drush -y en master && ../vendor/bin/drush -y master-exec && ../vendor/bin/drush -y fra && ../vendor/bin/drush cc all }'
+    - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || ( ../vendor/bin/drush -y en master && ../vendor/bin/drush -y master-exec && ../vendor/bin/drush -y fra && ../vendor/bin/drush cc all )'
     # Set crontab
     - ssh $SSH_URL "echo '$CRONTAB' |{ crontab -; } "
 deploy-live:
