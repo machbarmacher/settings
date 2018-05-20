@@ -6,6 +6,9 @@ if (!empty($isLive)) {
   $conf['shield_enabled'] = FALSE;
 }
 
+// Prevent deadlocks.
+$databases['default']['default']['init_commands']['isolation'] = "SET SESSION tx_isolation='READ-COMMITTED'";
+
 // Set master scope.
 $conf['master_version'] = 2;
 $conf['master_modules'] = array(

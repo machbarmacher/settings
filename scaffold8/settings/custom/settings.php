@@ -6,6 +6,10 @@ if (!empty($isLive)) {
   $config['shield.settings']['user'] = '';
 }
 
+// Prevent deadlocks.
+$databases['default']['default']['init_commands']['isolation'] = "SET SESSION tx_isolation='READ-COMMITTED'";
+
+
 # DEBUG
 # Switch off aggregation without messing with settings.
 #$config['system.performance']['css']['preprocess'] = FALSE;
