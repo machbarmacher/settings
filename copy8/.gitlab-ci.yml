@@ -19,8 +19,6 @@ stages:
     - SSH_URL_VAR="SSH_URL_${CI_COMMIT_REF_NAME^^}"
     - SSH_URL=${!SSH_URL_VAR}
     - '[[ $SSH_URL ]] && echo "SSH_URL=$SSH_URL" || { echo "Missing $SSH_URL_VAR."; exit 1; }'
-    # crontab.freistilbox file.
-    - '[[ -f settings/custom/crontab/freistilbox.txt ]] && { CRONTAB=$(cat settings/custom/crontab/freistilbox.txt); echo "CRONTAB=''$CRONTAB''"; } || { echo "Missing file crontab.freistilbox."; exit 1; }'
     # Prepare
     - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s) # Prepare env.
@@ -55,7 +53,7 @@ stages:
     # Revert
     - ssh $SSH_URL 'cd current/docroot; BOOT=$(../vendor/bin/drush status --fields=bootstrap) && [ $? -eq 0 ] && [ ! "$BOOT" ] || (../vendor/bin/drush -y updb && ( [ ! -f ../config-sync/core.extension.yml ] || ../vendor/bin/drush -y cim ))'
     # Set crontab
-    - ssh $SSH_URL "echo '$CRONTAB' |{ crontab -; } "
+    - ssh $SSH_URL "[ -f current/settings/custom/crontab/freistilbox.txt ] && crontab current/settings/custom/crontab/freistilbox.txt"
 deploy-live:
   <<: *deploy
   environment:
