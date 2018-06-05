@@ -20,15 +20,15 @@ if (!file_exists('../private/default')) { mkdir('../private/default'); }
 @include '../private/_settings/settings.local.php';
 
 // Redirect to HTTP(S) if necessary.
-if (PHP_SAPI !== 'cli') {
-  if (
-    is_file($_SERVER['HOME'] . '/current/private/_envx.d/PROTO')
-    && ('https' == trim(file_get_contents($_SERVER['HOME'] . '/current/private/_envx.d/PROTO')))
-    && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on")
-  ) {
-    $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    header('HTTP/1.1 301 Moved Permanently');
-    header('Location: ' . $redirect);
-    exit();
-  }
+if (
+  PHP_SAPI !== 'cli'
+  && is_file('../private/_envx.d/PROTO')
+  && ($protocolNeeded = trim(file_get_contents('../private/_envx.d/PROTO')))
+  && ($protocolIs = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on" ? 'https' : 'http')
+  && $protocolNeeded !== $protocolIs
+) {
+  $redirect = $protocolNeeded . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  header('HTTP/1.1 301 Moved Permanently');
+  header('Location: ' . $redirect);
+  exit();
 }
