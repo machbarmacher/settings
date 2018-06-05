@@ -21,12 +21,14 @@ if (!file_exists('../private/default')) { mkdir('../private/default'); }
 
 // Redirect to HTTP(S) if necessary.
 if (PHP_SAPI !== 'cli') {
-  if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on") {
-    if (file_exists($_SERVER['HOME'] . '/ssl')) {
+  if (
+    is_file($_SERVER['HOME'] . '/current/private/_envx.d/PROTO')
+    && ('https' == trim(file_get_contents($_SERVER['HOME'] . '/current/private/_envx.d/PROTO')))
+    && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on")
+  ) {
     $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header('HTTP/1.1 301 Moved Permanently');
     header('Location: ' . $redirect);
     exit();
-    }
   }
 }
