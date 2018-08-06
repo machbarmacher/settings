@@ -32,24 +32,25 @@
 # Ignore files even if symlinked
 /web/sites/*/files
 
-# Ignore scaffolded files.
-/web/.csslintrc
-/web/.editorconfig
-/web/.eslintignore
-/web/.eslintrc
-/web/.eslintrc.json
-/web/.gitattributes
-/web/.htaccess
-/web/autoload.php
-/web/index.php
-/web/robots.txt
-/web/sites/default/default.services.yml
-/web/sites/default/default.settings.php
-/web/sites/development.services.yml
-/web/sites/example.settings.local.php
-/web/sites/example.sites.php
-/web/update.php
-/web/web.config
+# Ignore scaffolded files - enable when needed.
+#/web/.csslintrc
+#/web/.editorconfig
+#/web/.eslintignore
+#/web/.eslintrc
+#/web/.eslintrc.json
+#/web/.gitattributes
+#/web/.htaccess
+#/web/autoload.php
+#/web/index.php
+#/web/robots.txt
+#/web/sites/default/default.services.yml
+#/web/sites/default/default.settings.php
+#/web/sites/development.services.yml
+#/web/sites/example.settings.local.php
+#/web/sites/example.sites.php
+#/web/update.php
+#/web/web.config
+#/web/.ht.router.php
 
 # Ignore composer-bin-extension vendor files.
 /vendor-bin/*/vendor/
