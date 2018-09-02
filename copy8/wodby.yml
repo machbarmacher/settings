@@ -19,4 +19,5 @@ pipeline:
     command: drush -y cim
     directory: docroot
     only_if: test "$(drush status --fields=bootstrap)" && test -f ../config-sync/core.extension.yml
-
+  - name: Fix legacy public files permisisons (new files and dirs fixed by sgid in settings)
+    command: find sites/default/files/ -type d -user wodby|xargs chmod 2775; find sites/default/files/ -user wodby|xargs chown :www-data

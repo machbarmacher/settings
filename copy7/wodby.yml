@@ -35,6 +35,8 @@ pipeline:
     command: drush cc all
     directory: docroot
     only_if: test "$(drush status --fields=bootstrap)"
-  - name: On dev make www-writable
+  - name: On dev make all code www-writable for features
     only_if: test "WODBY_INSTANCE_TYPE" -eq "dev"
     command: chown :www-data -R . && find . -type d -user wodby|xargs chmod 775 && find . -type f -user wodby|xargs chmod 664
+  - name: Fix legacy public files permisisons (new files and dirs fixed by sgid in settings)
+    command: find sites/default/files/ -type d -user wodby|xargs chmod 2775; find sites/default/files/ -user wodby|xargs chown :www-data
